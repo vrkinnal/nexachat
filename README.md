@@ -16,9 +16,9 @@ Angular 21 · TypeScript · Tailwind CSS · Groq API · Node.js · Express
 
 ## Run locally
 # Terminal 1
-ng serve
+ ng serve --proxy-config proxy.conf.json
 
 # Terminal 2  
-node server/proxy.js
+node server.js
 
 🔗 Live demo: https://nexachat-sepia.vercel.app/
