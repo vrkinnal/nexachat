@@ -25,8 +25,8 @@ examples. Only answer Angular and frontend related questions.`;
       ...history,
       { role: 'user' as const, content: userMessage },
     ];
-
-    const apiKey = (environment as any).openAIApiKey ?? (environment as any).OPENAI_API_KEY ?? '';
+    const apiKey = process.env['OPENAI_API_KEY'];
+   // const apiKey = (environment as any).openAIApiKey ?? (environment as any).OPENAI_API_KEY ?? '';
     const useDirect = Boolean(apiKey && apiKey.length > 0);
     const url = useDirect ? this.directUrl : this.proxyUrl;
 
