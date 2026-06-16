@@ -1,20 +1,47 @@
-<div class="flex w-full py-2" [ngClass]="{
+<div
+  class="flex w-full py-2"
+  [ngClass]="{
     'justify-end': message.role === 'user',
     'justify-start': message.role === 'assistant'
   }">
-    <div class="max-w-[85%]">
-        <div class="mb-2 text-xs font-semibold uppercase tracking-[0.3em]" [ngClass]="{
+
+  <div class="min-w-0 max-w-[85%]">
+
+    <div
+      class="mb-2 text-xs font-semibold uppercase tracking-[0.3em]"
+      [ngClass]="{
         'text-sky-300 text-right': message.role === 'user',
         'text-slate-500 text-left': message.role === 'assistant'
       }">
-            {{ message.role === 'user' ? 'You' : 'NexaChat' }}
-        </div>
 
-        <div class="rounded-3xl border px-4 py-3 shadow-lg shadow-slate-950/10" [ngClass]="{
+      {{ message.role === 'user' ? 'You' : 'NexaChat' }}
+
+    </div>
+
+    <div
+      class="min-w-0 overflow-hidden rounded-3xl border px-4 py-3 shadow-lg shadow-slate-950/10"
+      [ngClass]="{
         'bg-sky-500 text-slate-950 border-sky-400/30': message.role === 'user',
         'bg-slate-900 text-slate-100 border-slate-800': message.role === 'assistant'
       }">
-           <markdown [data]="message.text" class="prose prose-invert prose-sm max-w-none"></markdown>
-        </div>
+
+      <markdown
+        [data]="message.text"
+        class="prose prose-invert prose-sm max-w-none break-words
+               [&_*]:min-w-0
+               [&_p]:break-words
+               [&_li]:break-words
+               [&_code]:break-all
+               [&_pre]:max-w-full
+               [&_pre]:overflow-x-auto
+               [&_pre]:rounded-xl
+               [&_pre]:bg-slate-950
+               [&_table]:block
+               [&_table]:overflow-x-auto">
+      </markdown>
+
     </div>
+
+  </div>
+
 </div>

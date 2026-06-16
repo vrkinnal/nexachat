@@ -16,6 +16,7 @@ import { SidebarComponent } from '../components/sidebar/sidebar.component';
 export class ChatComponent {
   private readonly openAI = inject(OpenAIService);
   private readonly conversationService = inject(ConversationService);
+  public sidebarOpen = signal(false);
   @ViewChild('scrollBottom') private scrollBottom!: ElementRef;
 
   ngAfterViewChecked() {

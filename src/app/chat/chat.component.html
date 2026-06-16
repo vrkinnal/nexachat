@@ -1,50 +1,153 @@
-<section class="min-h-screen bg-slate-950 text-slate-100">
-  <div class="flex min-h-screen flex-col px-4 py-6 sm:px-6">
+<section class="min-h-dvh bg-slate-950 text-slate-100">
+  <div class="flex min-h-dvh flex-col px-4 py-4 sm:px-6 sm:py-6">
+
+    <!-- Header -->
     <header class="space-y-3">
       <div class="flex flex-wrap items-center gap-4">
+
+        <!-- Mobile menu button -->
+        <button
+          type="button"
+          class="rounded-xl border border-slate-800 p-2 text-slate-300 lg:hidden"
+          (click)="sidebarOpen.set(true)">
+
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-5 w-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor">
+
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16" />
+          </svg>
+        </button>
+
         <span
-          class="rounded-full bg-sky-500/20 px-3 py-1 text-sm font-semibold uppercase tracking-[0.3em] text-blue-400">
-          NexaChat</span>
-        <p class="text-sm text-slate-400">Angular 21 + Signals + Tailwind + OpenAI streaming.</p>
+          class="rounded-full bg-sky-500/20 px-3 py-1 text-xs font-semibold uppercase tracking-[0.3em] text-blue-400 sm:text-sm">
+          NexaChat
+        </span>
+
+        <p class="hidden text-sm text-slate-400 sm:block">
+          Angular 21 + Signals + Tailwind + OpenAI streaming.
+        </p>
+
       </div>
-      <h1 class="text-4xl font-semibold tracking-tight text-blue-400 md:text-5xl">AI Developer Assistant Chat</h1>
-      <p class="max-w-2xl text-slate-400">Ask code questions, inspect Angular patterns, or generate component
-        suggestions with streamed AI output.</p>
+
+      <h1 class="text-2xl font-semibold tracking-tight text-blue-400 sm:text-3xl md:text-5xl">
+        AI Developer Assistant Chat
+      </h1>
+
+      <p class="hidden max-w-2xl text-sm text-slate-400 sm:block">
+        Ask code questions, inspect Angular patterns, or generate component
+        suggestions with streamed AI output.
+      </p>
     </header>
 
-    <div class="mt-8 flex flex-1 gap-6">
+    <!-- Content -->
+    <div class="mt-4 flex flex-1 gap-4 overflow-hidden sm:mt-8 sm:gap-6">
+
+      <!-- Mobile overlay -->
+      <div
+        *ngIf="sidebarOpen()"
+        class="fixed inset-0 z-40 bg-black/50 lg:hidden"
+        (click)="sidebarOpen.set(false)">
+      </div>
+
+      <!-- Sidebar -->
       <aside
-        class="hidden w-[260px] shrink-0 rounded-3xl border border-slate-800 bg-slate-950/95 p-4 shadow-xl lg:block overflow-hidden">
-        <app-sidebar (conversationSelected)="onConversationSelected($event)" (newChatStarted)="onNewChatStarted()"
-          (conversationDeleted)="onConversationDeleted()" class="h-full">
+        class="fixed inset-y-0 left-0 z-50 w-[260px] overflow-hidden border-r border-slate-800 bg-slate-950 p-4 shadow-xl transition-transform duration-300 ease-in-out
+               lg:static lg:z-auto lg:translate-x-0 lg:rounded-3xl lg:border lg:bg-slate-950/95"
+        [class.translate-x-0]="sidebarOpen()"
+        [class.-translate-x-full]="!sidebarOpen()">
+
+        <div class="mb-4 flex items-center justify-between lg:hidden">
+
+          <h2 class="font-medium text-slate-200">
+            Conversations
+          </h2>
+
+          <button
+            type="button"
+            class="rounded-lg p-2 text-slate-400"
+            (click)="sidebarOpen.set(false)">
+
+            ✕
+
+          </button>
+
+        </div>
+
+        <app-sidebar
+          class="h-full"
+          (conversationSelected)="onConversationSelected($event); sidebarOpen.set(false)"
+          (newChatStarted)="onNewChatStarted(); sidebarOpen.set(false)"
+          (conversationDeleted)="onConversationDeleted()">
         </app-sidebar>
+
       </aside>
 
-      <main class="flex-1 space-y-4">
-        <div class="space-y-4" #scrollBottom>
-          <app-message *ngFor="let message of messages()" [message]="message"></app-message>
-        </div>
-        <div *ngIf="isLoading()" class="flex items-center gap-2 px-4 py-2">
-          <div class="h-2 w-2 animate-bounce rounded-full bg-sky-400"></div>
-          <div class="h-2 w-2 animate-bounce rounded-full bg-sky-400 [animation-delay:0.2s]"></div>
-          <div class="h-2 w-2 animate-bounce rounded-full bg-sky-400 [animation-delay:0.4s]"></div>
-        </div>
+      <!-- Main -->
+      <main class="flex min-h-0 min-w-0 flex-1 flex-col">
+
+        <!-- Messages -->
         <div
-          class="sticky bottom-0 left-0 right-0 z-10 rounded-3xl border border-slate-800 bg-slate-950/95 p-4 backdrop-blur-xl shadow-2xl shadow-slate-950/30">
-          <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
-            <textarea
-              class="w-full rounded-3xl border border-slate-800 bg-slate-900 px-4 py-3 text-slate-100 outline-none transition focus:border-sky-500 resize-none"
-              [value]="userInput()" (input)="userInput.set($any($event.target).value)" (keydown)="onKeyDown($event)"
-              placeholder="Type your developer prompt here... (Shift+Enter for new line)" [disabled]="isLoading()"
-              rows="3"></textarea>
-            <button
-              class="inline-flex shrink-0 items-center justify-center rounded-3xl bg-sky-500 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-sky-400 disabled:cursor-not-allowed disabled:opacity-60"
-              type="button" (click)="sendMessage()" [disabled]="isLoading()">
-              {{ isLoading() ? 'Thinking...' : 'Send' }}
-            </button>
+          #scrollBottom
+          class="flex-1 overflow-y-auto overflow-x-hidden">
+
+          <div class="max-w-full space-y-4 pr-1">
+
+            <app-message
+              *ngFor="let message of messages()"
+              [message]="message">
+            </app-message>
+
+            <div *ngIf="isLoading()" class="flex items-center gap-2 px-4 py-2">
+              <div class="h-2 w-2 animate-bounce rounded-full bg-sky-400"></div>
+              <div class="h-2 w-2 animate-bounce rounded-full bg-sky-400 [animation-delay:0.2s]"></div>
+              <div class="h-2 w-2 animate-bounce rounded-full bg-sky-400 [animation-delay:0.4s]"></div>
+            </div>
+
           </div>
+
         </div>
+
+        <!-- Composer -->
+        <div
+          class="mt-4 rounded-3xl border border-slate-800 bg-slate-950/95 p-3 backdrop-blur-xl shadow-2xl shadow-slate-950/30 sm:p-4">
+
+          <div class="flex flex-col gap-3">
+
+            <textarea
+              class="w-full resize-none rounded-3xl border border-slate-800 bg-slate-900 px-4 py-3 text-slate-100 outline-none transition focus:border-sky-500"
+              [value]="userInput()"
+              (input)="userInput.set($any($event.target).value)"
+              (keydown)="onKeyDown($event)"
+              placeholder="Type your developer prompt here... (Shift+Enter for new line)"
+              [disabled]="isLoading()"
+              rows="2">
+            </textarea>
+
+            <button
+              class="inline-flex w-full items-center justify-center rounded-3xl bg-sky-500 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-sky-400 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto sm:self-end"
+              type="button"
+              (click)="sendMessage()"
+              [disabled]="isLoading()">
+
+              {{ isLoading() ? 'Thinking...' : 'Send' }}
+
+            </button>
+
+          </div>
+
+        </div>
+
       </main>
+
     </div>
+
   </div>
 </section>
