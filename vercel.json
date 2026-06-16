@@ -1,4 +1,10 @@
 {
+  "cleanUrls": true,
+  "functions": {
+    "src/server/proxy.js": {
+      "runtime": "@vercel/node"
+    }
+  },
   "rewrites": [
     {
       "source": "/api/chat",
