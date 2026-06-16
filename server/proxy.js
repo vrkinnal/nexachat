@@ -59,10 +59,10 @@ app.post('/api/chat', async (req, res) => {
   }
 });
 
-// Run .listen ONLY locally. Vercel runs serverless.
+// For local development: Only spin up the port if we aren't deployed on Vercel
 if (!process.env.VERCEL) {
   app.listen(3000, () => console.log('Proxy running on port 3000'));
 }
 
-// Export it so Vercel can find it
+// Crucial for Vercel: Export the app instance
 module.exports = app;

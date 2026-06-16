@@ -1,25 +1,12 @@
 {
-  "builds": [
+  "rewrites": [
     {
-      "src": "src/server/proxy.js",
-      "use": "@vercel/node"
+      "source": "/api/chat",
+      "destination": "src/server/proxy.js"
     },
     {
-      "src": "package.json",
-      "use": "@vercel/angular"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/chat",
-      "dest": "src/server/proxy.js"
-    },
-    {
-      "handle": "filesystem"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }
