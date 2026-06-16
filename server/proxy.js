@@ -1,10 +1,22 @@
-require('dotenv').config({ path: 'D:/Vani/Angular/NexaChat/.env' });
-
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
+
+// Dynamically locate the .env file relative to this file's position
+if (!process.env.VERCEL) {
+  require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
+}
 
 const app = express();
-app.use(cors({ origin: 'http://localhost:4200' }));
+
+// Enable CORS for your local dev server and your live Vercel frontend URL
+app.use(cors({ 
+  origin: [
+    'http://localhost:4200',
+    'https://nexachat-sepia.vercel.app'
+  ] 
+}));
+
 app.use(express.json());
 
 app.post('/api/chat', async (req, res) => {
@@ -47,4 +59,10 @@ app.post('/api/chat', async (req, res) => {
   }
 });
 
-app.listen(3000, () => console.log('Proxy running on port 3000'));
+// Run .listen ONLY locally. Vercel runs serverless.
+if (!process.env.VERCEL) {
+  app.listen(3000, () => console.log('Proxy running on port 3000'));
+}
+
+// Export it so Vercel can find it
+module.exports = app;
