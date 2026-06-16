@@ -1,0 +1,50 @@
+<section class="min-h-screen bg-slate-950 text-slate-100">
+  <div class="flex min-h-screen flex-col px-4 py-6 sm:px-6">
+    <header class="space-y-3">
+      <div class="flex flex-wrap items-center gap-4">
+        <span
+          class="rounded-full bg-sky-500/20 px-3 py-1 text-sm font-semibold uppercase tracking-[0.3em] text-blue-400">
+          NexaChat</span>
+        <p class="text-sm text-slate-400">Angular 21 + Signals + Tailwind + OpenAI streaming.</p>
+      </div>
+      <h1 class="text-4xl font-semibold tracking-tight text-blue-400 md:text-5xl">AI Developer Assistant Chat</h1>
+      <p class="max-w-2xl text-slate-400">Ask code questions, inspect Angular patterns, or generate component
+        suggestions with streamed AI output.</p>
+    </header>
+
+    <div class="mt-8 flex flex-1 gap-6">
+      <aside
+        class="hidden w-[260px] shrink-0 rounded-3xl border border-slate-800 bg-slate-950/95 p-4 shadow-xl lg:block overflow-hidden">
+        <app-sidebar (conversationSelected)="onConversationSelected($event)" (newChatStarted)="onNewChatStarted()"
+          (conversationDeleted)="onConversationDeleted()" class="h-full">
+        </app-sidebar>
+      </aside>
+
+      <main class="flex-1 space-y-4">
+        <div class="space-y-4" #scrollBottom>
+          <app-message *ngFor="let message of messages()" [message]="message"></app-message>
+        </div>
+        <div *ngIf="isLoading()" class="flex items-center gap-2 px-4 py-2">
+          <div class="h-2 w-2 animate-bounce rounded-full bg-sky-400"></div>
+          <div class="h-2 w-2 animate-bounce rounded-full bg-sky-400 [animation-delay:0.2s]"></div>
+          <div class="h-2 w-2 animate-bounce rounded-full bg-sky-400 [animation-delay:0.4s]"></div>
+        </div>
+        <div
+          class="sticky bottom-0 left-0 right-0 z-10 rounded-3xl border border-slate-800 bg-slate-950/95 p-4 backdrop-blur-xl shadow-2xl shadow-slate-950/30">
+          <div class="flex flex-col gap-3 sm:flex-row sm:items-center">
+            <textarea
+              class="w-full rounded-3xl border border-slate-800 bg-slate-900 px-4 py-3 text-slate-100 outline-none transition focus:border-sky-500 resize-none"
+              [value]="userInput()" (input)="userInput.set($any($event.target).value)" (keydown)="onKeyDown($event)"
+              placeholder="Type your developer prompt here... (Shift+Enter for new line)" [disabled]="isLoading()"
+              rows="3"></textarea>
+            <button
+              class="inline-flex shrink-0 items-center justify-center rounded-3xl bg-sky-500 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-sky-400 disabled:cursor-not-allowed disabled:opacity-60"
+              type="button" (click)="sendMessage()" [disabled]="isLoading()">
+              {{ isLoading() ? 'Thinking...' : 'Send' }}
+            </button>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+</section>
