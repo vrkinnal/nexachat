@@ -1,18 +1,19 @@
 {
-  "cleanUrls": true,
-  "functions": {
-    "src/server/proxy.js": {
-      "runtime": "@vercel/node"
-    }
-  },
-  "rewrites": [
+  "builds": [
+    { "src": "package.json", "use": "@vercel/static-build" },
+    { "src": "src/server/proxy.js", "use": "@vercel/node" }
+  ],
+  "routes": [
     {
-      "source": "/api/chat",
-      "destination": "src/server/proxy.js"
+      "src": "/api/chat",
+      "dest": "src/server/proxy.js"
     },
     {
-      "source": "/(.*)",
-      "destination": "/index.html"
+      "handle": "filesystem"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
     }
   ]
 }
