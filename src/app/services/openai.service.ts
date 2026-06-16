@@ -6,8 +6,8 @@ import { environment } from '../../environments/environment';
 })
 export class OpenAIService {
 
-  // default proxy URL (used when no direct API key is provided in environment)
-  private readonly proxyUrl = '/api/chat';
+ //works with local proxy or vercel API key
+  private readonly apiUrl = '/api/chat';
   private readonly directUrl = 'https://api.openai.com/v1/chat/completions';
 
   private readonly systemPrompt = `You are NexaChat, an expert Angular developer assistant. 
@@ -28,7 +28,7 @@ examples. Only answer Angular and frontend related questions.`;
  
     const apiKey = (environment as any).openAIApiKey ?? (environment as any).OPENAI_API_KEY ?? '';
     const useDirect = Boolean(apiKey && apiKey.length > 0);
-    const url = useDirect ? this.directUrl : this.proxyUrl;
+    const url = useDirect ? this.directUrl : this.apiUrl;
 
     const headers: Record<string, string> = {
       'Content-Type': 'application/json',

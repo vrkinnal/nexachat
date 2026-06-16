@@ -20,3 +20,5 @@ ng serve
 
 # Terminal 2  
 node server/proxy.js
+
+🔗 Live demo: https://nexachat-sepia.vercel.app/
