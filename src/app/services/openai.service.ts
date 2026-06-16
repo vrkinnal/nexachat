@@ -7,7 +7,7 @@ import { environment } from '../../environments/environment';
 export class OpenAIService {
 
   // default proxy URL (used when no direct API key is provided in environment)
-  private readonly proxyUrl = 'http://localhost:3000/api/chat';
+  private readonly proxyUrl = '/api/chat';
   private readonly directUrl = 'https://api.openai.com/v1/chat/completions';
 
   private readonly systemPrompt = `You are NexaChat, an expert Angular developer assistant. 
