@@ -17,11 +17,20 @@ export class ChatComponent {
   private readonly openAI = inject(OpenAIService);
   private readonly conversationService = inject(ConversationService);
   public sidebarOpen = signal(false);
-  @ViewChild('scrollBottom') private scrollBottom!: ElementRef;
+@ViewChild('scrollBottom')
+scrollBottom!: ElementRef<HTMLDivElement>;
 
-  ngAfterViewChecked() {
-    this.scrollBottom?.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'end' });
-  }
+onInputFocus(): void {
+  setTimeout(() => this.scrollToBottom(), 300);
+}
+
+scrollToBottom(): void {
+  const el = this.scrollBottom?.nativeElement;
+
+  if (!el) return;
+
+  el.scrollTop = el.scrollHeight;
+}
   messages = signal<ChatMessage[]>([
     {
       role: 'assistant',

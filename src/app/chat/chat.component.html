@@ -1,28 +1,17 @@
-<section class="min-h-dvh bg-slate-950 text-slate-100">
-  <div class="flex min-h-dvh flex-col px-4 py-4 sm:px-6 sm:py-6">
+<section class="h-[100svh] overflow-hidden bg-slate-950 text-slate-100">
+  <div class="flex h-full flex-col px-4 py-4 sm:px-6 sm:py-6">
 
     <!-- Header -->
     <header class="space-y-3">
       <div class="flex flex-wrap items-center gap-4">
 
         <!-- Mobile menu button -->
-        <button
-          type="button"
-          class="rounded-xl border border-slate-800 p-2 text-slate-300 lg:hidden"
+        <button type="button" class="rounded-xl border border-slate-800 p-2 text-slate-300 lg:hidden"
           (click)="sidebarOpen.set(true)">
 
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            class="h-5 w-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M4 6h16M4 12h16M4 18h16" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
           </svg>
         </button>
 
@@ -51,18 +40,13 @@
     <div class="mt-4 flex flex-1 gap-4 overflow-hidden sm:mt-8 sm:gap-6">
 
       <!-- Mobile overlay -->
-      <div
-        *ngIf="sidebarOpen()"
-        class="fixed inset-0 z-40 bg-black/50 lg:hidden"
-        (click)="sidebarOpen.set(false)">
+      <div *ngIf="sidebarOpen()" class="fixed inset-0 z-40 bg-black/50 lg:hidden" (click)="sidebarOpen.set(false)">
       </div>
 
       <!-- Sidebar -->
-      <aside
-        class="fixed inset-y-0 left-0 z-50 w-[260px] overflow-hidden border-r border-slate-800 bg-slate-950 p-4 shadow-xl transition-transform duration-300 ease-in-out
+      <aside class="fixed inset-y-0 left-0 z-50 w-[260px] overflow-hidden border-r border-slate-800 bg-slate-950 p-4 shadow-xl transition-transform duration-300 ease-in-out
                lg:static lg:z-auto lg:translate-x-0 lg:rounded-3xl lg:border lg:bg-slate-950/95"
-        [class.translate-x-0]="sidebarOpen()"
-        [class.-translate-x-full]="!sidebarOpen()">
+        [class.translate-x-0]="sidebarOpen()" [class.-translate-x-full]="!sidebarOpen()">
 
         <div class="mb-4 flex items-center justify-between lg:hidden">
 
@@ -70,10 +54,7 @@
             Conversations
           </h2>
 
-          <button
-            type="button"
-            class="rounded-lg p-2 text-slate-400"
-            (click)="sidebarOpen.set(false)">
+          <button type="button" class="rounded-lg p-2 text-slate-400" (click)="sidebarOpen.set(false)">
 
             ✕
 
@@ -81,11 +62,8 @@
 
         </div>
 
-        <app-sidebar
-          class="h-full"
-          (conversationSelected)="onConversationSelected($event); sidebarOpen.set(false)"
-          (newChatStarted)="onNewChatStarted(); sidebarOpen.set(false)"
-          (conversationDeleted)="onConversationDeleted()">
+        <app-sidebar class="h-full" (conversationSelected)="onConversationSelected($event); sidebarOpen.set(false)"
+          (newChatStarted)="onNewChatStarted(); sidebarOpen.set(false)" (conversationDeleted)="onConversationDeleted()">
         </app-sidebar>
 
       </aside>
@@ -94,15 +72,11 @@
       <main class="flex min-h-0 min-w-0 flex-1 flex-col">
 
         <!-- Messages -->
-        <div
-          #scrollBottom
-          class="flex-1 overflow-y-auto overflow-x-hidden">
+        <div #scrollBottom class="flex-1 overflow-y-auto overflow-x-hidden overscroll-contain">
 
           <div class="max-w-full space-y-4 pr-1">
 
-            <app-message
-              *ngFor="let message of messages()"
-              [message]="message">
+            <app-message *ngFor="let message of messages()" [message]="message">
             </app-message>
 
             <div *ngIf="isLoading()" class="flex items-center gap-2 px-4 py-2">
@@ -117,25 +91,20 @@
 
         <!-- Composer -->
         <div
-          class="mt-4 rounded-3xl border border-slate-800 bg-slate-950/95 p-3 backdrop-blur-xl shadow-2xl shadow-slate-950/30 sm:p-4">
+          class="chat-composer mt-4 shrink-0 rounded-3xl border border-slate-800 bg-slate-950/95 p-3 backdrop-blur-xl shadow-2xl shadow-slate-950/30 sm:p-4">
 
           <div class="flex flex-col gap-3">
 
-            <textarea
-              class="w-full resize-none rounded-3xl border border-slate-800 bg-slate-900 px-4 py-3 text-slate-100 outline-none transition focus:border-sky-500"
-              [value]="userInput()"
-              (input)="userInput.set($any($event.target).value)"
-              (keydown)="onKeyDown($event)"
-              placeholder="Type your developer prompt here... (Shift+Enter for new line)"
-              [disabled]="isLoading()"
-              rows="2">
+            <textarea #messageInput
+              class="w-full resize-none rounded-3xl border border-slate-800 bg-slate-900 px-4 py-3 text-base text-slate-100 outline-none transition focus:border-sky-500"
+              [value]="userInput()" (input)="userInput.set($any($event.target).value)" (keydown)="onKeyDown($event)"
+              (focus)="onInputFocus()" placeholder="Type your developer prompt here... (Shift+Enter for new line)"
+              [disabled]="isLoading()" rows="2">
             </textarea>
 
             <button
               class="inline-flex w-full items-center justify-center rounded-3xl bg-sky-500 px-5 py-3 text-sm font-semibold text-slate-950 transition hover:bg-sky-400 disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto sm:self-end"
-              type="button"
-              (click)="sendMessage()"
-              [disabled]="isLoading()">
+              type="button" (click)="sendMessage()" [disabled]="isLoading()">
 
               {{ isLoading() ? 'Thinking...' : 'Send' }}
 

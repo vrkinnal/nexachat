@@ -3,3 +3,18 @@
 @tailwind utilities;
 
 /* You can add global styles to this file, and also import other style files */
+html,
+body {
+  height: 100%;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+app-root {
+  display: block;
+  height: 100%;
+}
+
+.chat-composer {
+  padding-bottom: calc(0.75rem + env(safe-area-inset-bottom));
+}
